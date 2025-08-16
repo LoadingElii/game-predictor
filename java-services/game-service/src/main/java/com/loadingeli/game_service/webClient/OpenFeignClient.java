@@ -1,20 +1,18 @@
 package com.loadingeli.game_service.webClient;
 
-import com.loadingeli.game_service.entity.GameDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+@FeignClient(name = "NFL-Data", url = "www.nflapi.com")
+public interface OpenFeignClient {
 
-@FeignClient(name = "NFL-Data", url = "")
-public class OpenFeignClient {
+    @GetMapping("/games")
+    public void /*List<GameDTO>*/ getAllGamesByWeek(Integer week);
 
-    public void /*List<GameDTO>*/ getAllGamesByWeek(Integer week){
-    }
+    @GetMapping("/teams")
+    public void /*List<GameDTO>*/ getGamesByTeam(String team);
 
-    public void /*List<GameDTO>*/ getGamesByTeam(String team){
-    }
-
-    public void /*GameDTO*/ getGameByTeam(String team){
-    }
+    @GetMapping("/week")
+    public void /*GameDTO*/ getGameByTeam(String team);
 
 }

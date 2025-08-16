@@ -17,8 +17,8 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public void /*Optional<MemberDTO>*/ getMemberById(Long id) {
-        memberRepository.getReferenceById(id);
+    public Member /*Optional<MemberDTO>*/ getMemberById(Long id) {
+        return memberRepository.getReferenceById(id);
 
     }
 
@@ -32,5 +32,9 @@ public class MemberService {
 
     public void deleteMemberById(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    public Member createMember(Member newMember) {
+        return memberRepository.save(newMember);
     }
 }
