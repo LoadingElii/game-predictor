@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/member")
 public class MemberController {
@@ -19,13 +21,13 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public Member /*MemberDTO*/ getMemberbyId(@PathVariable("id") Long id) {
-        return memberService.getMemberById(id);
+    public ResponseEntity<Member> /*MemberDTO*/ getMemberbyId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(memberService.getMemberById(id));
     }
 
     @GetMapping("/all")
-    public void /*List<MemberDTO>*/ getAllMembers() {
-        memberService.getAllMembers();
+    public List<Member> /*List<MemberDTO>*/ getAllMembers() {
+        return memberService.getAllMembers();
     }
 
     @PostMapping("/create")
@@ -33,10 +35,10 @@ public class MemberController {
         return memberService.createMember(newMember);
     }
 
-    @PutMapping("/update/{id}")
-    public void /*MemberDTO*/ updateMemberById(@PathVariable("id") Long id) {
-        memberService.updateMemberById(id);
-    }
+//    @PutMapping("/update/{id}")
+//    public Member /*MemberDTO*/ updateMemberById(@PathVariable("id") Long id) {
+//        return memberService.updateMemberById(id);
+//    }
 
     @DeleteMapping("/delete/{id}")
     public void /*List<MemberDTO>*/ deleteMemberById(@PathVariable("id") Long id) {

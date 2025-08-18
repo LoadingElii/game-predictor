@@ -6,6 +6,7 @@ import com.loadingeli.user_service.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,13 +23,12 @@ public class MemberService {
 
     }
 
-    public void /*List<MemberDTO>*/ getAllMembers() {
-        memberRepository.findAll();
+    public List<Member> /*List<MemberDTO>*/ getAllMembers() {
+        return memberRepository.findAll();
     }
-
-    public void /*MemberDTO*/ updateMemberById(Long id){
-        Member memberToUpdate = memberRepository.getReferenceById(id);
-    }
+//
+//    public Member /*MemberDTO*/ updateMemberById(Long id, Member member){
+//    }
 
     public void deleteMemberById(Long id) {
         memberRepository.deleteById(id);
