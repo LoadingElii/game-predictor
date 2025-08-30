@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   api-gateway:
     build: ./java-services/api-gateway
@@ -121,6 +120,6 @@ networks:
 volumes:
   game_data:
   member_data:
-  prediction-data:
+  prediction_data:
 
   
