@@ -1,0 +1,126 @@
+version: '3.8'
+services:
+  api-gateway:
+    build: ./java-services/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8090:8080"
+    depends_on:
+      - eureka-server
+      - config-server
+    networks:
+      - game-predictor
+
+  config-server:
+    build: ./java-services/config-server
+    container_name: config-server
+    ports:
+      - "8888:8080"
+    depends_on:
+      - eureka-server
+    networks:
+      - game-predictor
+
+  eureka-server:
+    build: ./java-services/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8080"
+    networks:
+      - game-predictor
+
+  game-service:
+    build: ./java-services/game-service
+    container_name: game-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://game-database:5432/game_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${PGPASSWORD}
+    depends_on:
+      - eureka-server
+      - config-server
+      - game-database
+    networks:
+      - game-predictor
+
+  member-service:
+    build: ./java-services/member-service
+    container_name: member-service
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://member-database:5433/member_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${PGPASSWORD}
+    depends_on:
+      - eureka-server
+      - config-server
+      - member-database
+    networks:
+      - game-predictor
+
+  prediction-orchestrator:
+    build: ./java-services/prediction-orchestrator
+    container_name: prediction-orchestrator
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://prediction-database:5434/prediction_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${PGPASSWORD}
+    depends_on:
+      - eureka-server
+      - config-server
+      - prediction-database
+    networks:
+      - game-predictor
+
+  game-database:
+    image: postgres:16-alpine
+    container_name: game_database
+    environment:
+      POSTGRES_DB: game_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - game_data:/var/lib/postgresql/data
+
+  member-database:
+    image: postgres:16-alpine
+    container_name: member_database
+    environment:
+      POSTGRES_DB: member_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - member_data:/var/lib/postgresql/data
+
+  prediction-database:
+    image: postgres:16-alpine
+    container_name: prediction_database
+    environment:
+      POSTGRES_DB: prediction_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - prediction_data:/var/lib/postgresql/data
+
+
+networks:
+  game-predictor:
+    driver: bridge
+
+volumes:
+  game_data:
+  member_data:
+  prediction-data:
+
+  

@@ -9,8 +9,7 @@ RUN mvn clean package -DskipTests
 #Stage 2: Runtime
 FROM openjdk:17-slim
 WORKDIR /app/services/member-service
-ARG ARTIFACT_NAME
-ENV ARTIFACT_NAME=${ARTIFACT_NAME}
-COPY --from=build /app/services/${ARTIFACT_NAME}/target/*.jar app.jar
+
+COPY --from=builder /app/services/member-service/target/*.jar app.jar
 EXPOSE 8082
 ENTRYPOINT ["java", "-jar", "app.jar"]

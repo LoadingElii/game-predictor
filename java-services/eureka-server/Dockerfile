@@ -9,8 +9,6 @@ RUN mvn clean package -DskipTests
 #Stage 2: Runtime
 FROM openjdk:17-slim
 WORKDIR /app/services/eureka-server
-ARG ARTIFACT_NAME
-ENV ARTIFACT_NAME=${ARTIFACT_NAME}
-COPY --from=build /app/services/${ARTIFACT_NAME}/target/*.jar app.jar
+COPY --from=builder /app/services/eureka-server/target/*.jar app.jar
 EXPOSE 8761
 ENTRYPOINT ["java", "-jar", "app.jar"]
